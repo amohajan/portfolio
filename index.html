@@ -503,6 +503,31 @@ footer {
 .ft-r a { font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--slate); text-decoration:none; transition:color .2s; }
 .ft-r a:hover { color:var(--gold2); }
 
+/* ─── HAMBURGER / MOBILE NAV ─── */
+.hamburger {
+  display:none; flex-direction:column; gap:5px; cursor:pointer;
+  padding:6px; background:none; border:none;
+}
+.hamburger span {
+  width:22px; height:2px; background:var(--slate2); border-radius:2px;
+  transition:transform .3s, opacity .3s;
+}
+.mob-nav {
+  display:none; position:fixed; top:68px; left:0; right:0; z-index:998;
+  background:rgba(12,14,18,0.97); backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--bdr);
+  flex-direction:column; padding:18px 7%;
+}
+.mob-nav a {
+  color:var(--slate2); text-decoration:none; font-size:0.82rem;
+  font-weight:500; letter-spacing:0.1em; text-transform:uppercase;
+  padding:13px 0; border-bottom:1px solid var(--bdr);
+  transition:color .2s;
+}
+.mob-nav a:last-child { border-bottom:none; }
+.mob-nav a:hover { color:var(--gold2); }
+.mob-nav.open { display:flex; }
+
 /* ─── RESPONSIVE ─── */
 @media(max-width:1100px){
   .hero-wrap { grid-template-columns:1fr; gap:60px; }
@@ -514,6 +539,7 @@ footer {
 }
 @media(max-width:768px){
   nav ul { display:none; }
+  .hamburger { display:flex; }
   .skill-row,.pj-grid,.edu-grid { grid-template-columns:1fr; }
   .hero-kpis { flex-direction:column; }
   .kpi { border-right:none; border-bottom:1px solid var(--bdr); }
@@ -544,7 +570,18 @@ footer {
     <li><a href="#education">Education</a></li>
     <li><a href="#contact" class="n-hire">Hire Me</a></li>
   </ul>
+  <button class="hamburger" id="ham" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="mob-nav" id="mob-nav">
+  <a href="#about" onclick="closeMob()">About</a>
+  <a href="#skills" onclick="closeMob()">Skills</a>
+  <a href="#experience" onclick="closeMob()">Experience</a>
+  <a href="#projects" onclick="closeMob()">Projects</a>
+  <a href="#education" onclick="closeMob()">Education</a>
+  <a href="#contact" onclick="closeMob()">Hire Me</a>
+</div>
 
 <!-- HERO -->
 <section id="home">
@@ -555,7 +592,7 @@ footer {
 
     <!-- LEFT -->
     <div>
-      <div class="hero-tag"><span class="hero-tag-line"></span>Site Reliability Engineer · Kolkata, WB</div>
+      <div class="hero-tag"><span class="hero-tag-line"></span>Site Reliability Engineer · Lansdale, PA</div>
       <h1 class="hero-h1">Avoy<br><span>Mohajan</span></h1>
       <div class="hero-divider"></div>
       <p class="hero-tagline">Linux Infrastructure &nbsp;·&nbsp; Cloud &amp; Automation &nbsp;·&nbsp; SRE</p>
@@ -576,7 +613,7 @@ footer {
     <div class="portrait-col">
       <div class="portrait-stage">
         <div class="pframe">
-          <img src="IMG_0648.jpeg" alt="Avoy Mohajan"
+          <img src="profile.jpg" alt="Avoy Mohajan"
             onerror="this.style.display='none'; document.querySelector('.pframe-init').style.display='flex';">
           <div class="pframe-init" style="display:none;">AM</div>
           <div class="pframe-overlay"></div>
@@ -719,8 +756,8 @@ footer {
 
       <div class="xp">
         <div class="xp-header">
-          <div class="xp-role">Site Reliability Engineer Intern</div>
-          <span class="xp-period">Oct 2025 – Present</span>
+          <div class="xp-role">Systems Engineer Intern</div>
+          <span class="xp-period">Nov 2025 – Present</span>
         </div>
         <div class="xp-co"><strong>IpserLabs LLC</strong> &nbsp;·&nbsp; Fort Worth, TX</div>
         <ul class="xp-pts">
@@ -856,22 +893,26 @@ footer {
       <div>
         <div class="overline">Let's Connect</div>
         <h2 class="ct-hl">Open to new<br><em>opportunities</em></h2>
-        <div class="ct-avail"><div class="avail-dot"></div>Available · Kolkata, WB · Open to Relocation</div>
+        <div class="ct-avail"><div class="avail-dot"></div>Available · Lansdale, PA · Open to Relocation</div>
         <p class="ct-sub">Whether you need a skilled SRE to strengthen your production infrastructure, lead cloud migration initiatives, or bring reliability engineering expertise to your team — let's start a conversation.</p>
-        <a href="mailto:avoymohajan@icloud.com" class="btn-a">Send a Message &rarr;</a>
+        <a href="mailto:avoymohajan@gmail.com" class="btn-a">Send a Message &rarr;</a>
       </div>
       <div class="ct-links">
-        <a class="ct-row" href="tel:+18334822387">
+        <a class="ct-row" href="tel:+14052692384">
           <div class="ct-ico"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.58 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.73a16 16 0 0 0 6.29 6.29l1.8-1.8a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
-          <div><span class="ct-lbl">Phone</span><span class="ct-val">+1 (833) 482-2387</span></div>
+          <div><span class="ct-lbl">Phone</span><span class="ct-val">+1 (405) 269-2384</span></div>
         </a>
-        <a class="ct-row" href="mailto:avoymohajan@icloud.com">
+        <a class="ct-row" href="mailto:avoymohajan@gmail.com">
           <div class="ct-ico"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
-          <div><span class="ct-lbl">Email</span><span class="ct-val">avoymohajan@icloud.com</span></div>
+          <div><span class="ct-lbl">Email</span><span class="ct-val">avoymohajan@gmail.com</span></div>
         </a>
         <a class="ct-row" href="https://linkedin.com/in/avoymohajan" target="_blank">
           <div class="ct-ico"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div>
           <div><span class="ct-lbl">LinkedIn</span><span class="ct-val">linkedin.com/in/avoymohajan</span></div>
+        </a>
+        <a class="ct-row" href="https://verdant-strudel-5c403a.netlify.app/" target="_blank">
+          <div class="ct-ico"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <div><span class="ct-lbl">Portfolio</span><span class="ct-val">verdant-strudel-5c403a.netlify.app</span></div>
         </a>
         <a class="ct-row" href="https://www.mdpi.com/2079-9292/14/6/1095" target="_blank">
           <div class="ct-ico"><svg viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></div>
@@ -879,7 +920,7 @@ footer {
         </a>
         <a class="ct-row" href="#">
           <div class="ct-ico"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-          <div><span class="ct-lbl">Location</span><span class="ct-val">Kolkata, WB — Open to Relocation</span></div>
+          <div><span class="ct-lbl">Location</span><span class="ct-val">Lansdale, PA — Open to Relocation</span></div>
         </a>
       </div>
     </div>
@@ -897,5 +938,11 @@ footer {
   </div>
 </footer>
 
+<script>
+const ham = document.getElementById('ham');
+const mob = document.getElementById('mob-nav');
+ham.addEventListener('click', () => { mob.classList.toggle('open'); });
+function closeMob() { mob.classList.remove('open'); }
+</script>
 </body>
 </html>
