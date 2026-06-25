@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avoy Mohajan — Site Reliability Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:       #0C0E12;
+  --ink2:      #111418;
+  --ink3:      #161B22;
+  --surface:   #1A2030;
+  --surface2:  #1F2638;
+  --gold:      #BF9B5A;
+  --gold2:     #D4B278;
+  --gold3:     #EDD49A;
+  --goldglow:  rgba(191,155,90,0.14);
+  --goldbdr:   rgba(191,155,90,0.28);
+  --goldbdr2:  rgba(191,155,90,0.5);
+  --slate:     #8A96A8;
+  --slate2:    #B0BBCC;
+  --slate3:    #CDD5E0;
+  --dim:       rgba(255,255,255,0.05);
+  --bdr:       rgba(255,255,255,0.07);
+  --teal:      #38B2A0;
+  --teal-soft: rgba(56,178,160,0.1);
+  --teal-bdr:  rgba(56,178,160,0.28);
+  --cream:     #F2EDE4;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background: var(--ink);
+  color: var(--cream);
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb { background: var(--goldbdr2); }
+
+body::after {
+  content:'';
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='1' height='1' fill='rgba(255,255,255,0.018)'/%3E%3C/svg%3E");
+}
+
+/* ─── NAV ─── */
+nav {
+  position:fixed; top:0; width:100%; z-index:999;
+  height:68px; padding:0 7%;
+  display:flex; align-items:center; justify-content:space-between;
+  background:rgba(12,14,18,0.92);
+  backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--bdr);
+}
+.n-logo { display:flex; align-items:center; gap:13px; text-decoration:none; }
+.n-seal {
+  width:38px; height:38px; border-radius:50%;
+  border:1.5px solid var(--goldbdr2);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Playfair Display',serif; font-size:0.9rem; font-weight:700;
+  color:var(--gold); letter-spacing:0.04em; flex-shrink:0;
+  background:radial-gradient(circle at 40% 35%, rgba(191,155,90,0.12), transparent 70%);
+}
+.n-text { line-height:1.25; }
+.n-name { font-size:0.82rem; font-weight:600; color:var(--cream); letter-spacing:0.04em; }
+.n-sub  { font-size:0.65rem; font-weight:400; color:var(--slate); letter-spacing:0.1em; text-transform:uppercase; }
+nav ul  { display:flex; gap:32px; list-style:none; align-items:center; }
+nav a   { color:var(--slate); text-decoration:none; font-size:0.72rem; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; transition:color .2s; }
+nav a:hover { color:var(--gold2); }
+.n-hire {
+  padding:8px 22px; border-radius:3px;
+  border:1px solid var(--goldbdr2);
+  color:var(--gold2) !important; background:var(--goldglow);
+  transition:background .2s !important;
+}
+.n-hire:hover { background:rgba(191,155,90,0.22) !important; }
+
+/* ─── HERO ─── */
+#home {
+  position:relative; z-index:1;
+  min-height:100vh; display:flex; align-items:center;
+  padding:88px 7% 80px;
+  overflow:hidden;
+}
+.hero-glow {
+  position:absolute; pointer-events:none;
+  width:900px; height:900px; border-radius:50%;
+  background:radial-gradient(circle, rgba(191,155,90,0.07) 0%, transparent 65%);
+  top:-300px; right:-200px; z-index:0;
+}
+.hero-glow2 {
+  position:absolute; pointer-events:none;
+  width:600px; height:600px; border-radius:50%;
+  background:radial-gradient(circle, rgba(56,178,160,0.05) 0%, transparent 65%);
+  bottom:-100px; left:-100px; z-index:0;
+}
+.hero-grid-lines {
+  position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 80px),
+    repeating-linear-gradient(0deg,  rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 80px);
+}
+.hero-wrap {
+  position:relative; z-index:1;
+  max-width:1260px; margin:0 auto; width:100%;
+  display:grid; grid-template-columns:1fr 380px; gap:90px; align-items:center;
+}
+
+.hero-tag {
+  display:inline-flex; align-items:center; gap:10px;
+  margin-bottom:32px;
+  font-size:0.65rem; font-weight:600; letter-spacing:0.22em; text-transform:uppercase;
+  color:var(--gold);
+  opacity:0; animation:fadeUp .7s .1s ease forwards;
+}
+.hero-tag-line { width:36px; height:1px; background:var(--gold); }
+
+.hero-h1 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(3.4rem,5.5vw,5.2rem);
+  font-weight:700; line-height:1.02;
+  color:#fff; letter-spacing:-0.02em;
+  margin-bottom:10px;
+  opacity:0; animation:fadeUp .7s .18s ease forwards;
+}
+.hero-h1 span { color:var(--gold2); font-style:italic; font-weight:400; }
+
+.hero-divider {
+  width:56px; height:2px;
+  background:linear-gradient(90deg, var(--gold), transparent);
+  margin:22px 0;
+  opacity:0; animation:fadeUp .7s .25s ease forwards;
+}
+
+.hero-tagline {
+  font-size:0.78rem; font-weight:500; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--teal); margin-bottom:22px;
+  opacity:0; animation:fadeUp .7s .3s ease forwards;
+}
+
+.hero-desc {
+  max-width:520px; font-size:0.93rem; color:var(--slate2); line-height:1.95;
+  margin-bottom:40px;
+  opacity:0; animation:fadeUp .7s .36s ease forwards;
+}
+
+.hero-kpis {
+  display:flex; gap:0; margin-bottom:44px;
+  border:1px solid var(--bdr); border-radius:6px; overflow:hidden;
+  opacity:0; animation:fadeUp .7s .42s ease forwards;
+}
+.kpi {
+  flex:1; padding:20px 24px; text-align:center;
+  border-right:1px solid var(--bdr);
+  background:var(--dim);
+}
+.kpi:last-child { border-right:none; }
+.kpi-val {
+  font-family:'Playfair Display',serif;
+  font-size:2.1rem; font-weight:700; color:var(--gold2); line-height:1;
+  display:block; margin-bottom:6px;
+}
+.kpi-lbl {
+  font-size:0.62rem; font-weight:500; letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--slate);
+}
+
+.hero-btns {
+  display:flex; gap:14px; flex-wrap:wrap;
+  opacity:0; animation:fadeUp .7s .48s ease forwards;
+}
+.btn-a {
+  display:inline-flex; align-items:center; gap:10px;
+  padding:14px 32px; border-radius:4px;
+  background:var(--gold); color:var(--ink); font-weight:700;
+  font-size:0.75rem; letter-spacing:0.12em; text-transform:uppercase;
+  text-decoration:none; transition:filter .2s,transform .2s;
+}
+.btn-a:hover { filter:brightness(1.08); transform:translateY(-2px); }
+.btn-b {
+  display:inline-flex; align-items:center; gap:10px;
+  padding:13px 32px; border-radius:4px;
+  border:1px solid var(--bdr); color:var(--slate2);
+  font-size:0.75rem; font-weight:500; letter-spacing:0.12em; text-transform:uppercase;
+  text-decoration:none; transition:border-color .2s,color .2s;
+}
+.btn-b:hover { border-color:var(--goldbdr2); color:var(--gold2); }
+
+/* portrait */
+.portrait-col {
+  display:flex; flex-direction:column; align-items:center;
+  opacity:0; animation:fadeUp .8s .22s ease forwards;
+}
+.portrait-stage { position:relative; width:310px; }
+.portrait-stage::before {
+  content:''; position:absolute;
+  inset:0; border-radius:8px;
+  border:1px solid rgba(191,155,90,0.2);
+  transform:translate(12px,14px); z-index:0;
+}
+.pframe {
+  position:relative; z-index:2;
+  width:310px; height:370px;
+  border-radius:6px; overflow:hidden;
+  border:1.5px solid var(--goldbdr2);
+  background:var(--surface);
+}
+.pframe img {
+  width:100%; height:100%; object-fit:cover; object-position:top center;
+  display:block; filter:saturate(0.88) contrast(1.05) brightness(0.97);
+}
+.pframe-overlay {
+  position:absolute; inset:0; z-index:1;
+  background:linear-gradient(to top, rgba(12,14,18,0.55) 0%, transparent 55%);
+}
+.pframe-init {
+  width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Playfair Display',serif; font-size:5rem; font-weight:700;
+  color:var(--gold); background:var(--surface2);
+}
+.corner { position:absolute; width:20px; height:20px; z-index:3; }
+.c-tl { top:-1px;  left:-1px;  border-top:2px solid var(--gold); border-left:2px solid var(--gold); }
+.c-tr { top:-1px;  right:-1px; border-top:2px solid var(--gold); border-right:2px solid var(--gold); }
+.c-bl { bottom:-1px; left:-1px;  border-bottom:2px solid var(--gold); border-left:2px solid var(--gold); }
+.c-br { bottom:-1px; right:-1px; border-bottom:2px solid var(--gold); border-right:2px solid var(--gold); }
+.avail-chip {
+  position:absolute; bottom:-18px; left:50%; transform:translateX(-50%);
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--ink2); border:1.5px solid var(--goldbdr2);
+  padding:8px 20px; border-radius:30px; white-space:nowrap; z-index:4;
+}
+.avail-dot {
+  width:7px; height:7px; border-radius:50%; background:#4ADE80;
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+.avail-txt { font-size:0.68rem; font-weight:600; letter-spacing:0.1em; color:var(--gold3); text-transform:uppercase; }
+.badge-row { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:50px; }
+.pbadge {
+  font-size:0.63rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase;
+  padding:5px 13px; border-radius:2px;
+  background:var(--goldglow); border:1px solid var(--goldbdr);
+  color:var(--gold2);
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(22px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ─── SECTION SHELL ─── */
+.sec { position:relative; z-index:1; padding:104px 7%; }
+.sec.alt { background:var(--ink2); }
+.sec-max { max-width:1260px; margin:0 auto; }
+
+.overline {
+  display:flex; align-items:center; gap:10px; margin-bottom:12px;
+  font-size:0.63rem; font-weight:600; letter-spacing:0.24em; text-transform:uppercase;
+  color:var(--gold);
+}
+.overline::before { content:''; width:28px; height:1px; background:var(--gold); }
+
+.sec-title {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2rem,3.2vw,2.75rem); font-weight:700;
+  color:#fff; line-height:1.15; margin-bottom:60px;
+}
+.sec-title em { font-style:italic; font-weight:400; color:var(--gold2); }
+
+.hr { max-width:1260px; margin:0 auto; height:1px; background:linear-gradient(90deg,transparent,var(--bdr),transparent); }
+
+/* ─── ABOUT ─── */
+.about-grid { display:grid; grid-template-columns:1.15fr 0.85fr; gap:80px; align-items:start; }
+.about-body { font-size:0.91rem; color:var(--slate2); line-height:2; }
+.about-body p { margin-bottom:18px; }
+.about-nums {
+  display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:36px;
+}
+.astat {
+  padding:22px 18px; border-radius:6px;
+  background:var(--dim); border:1px solid var(--bdr);
+  border-left:2px solid var(--gold);
+  transition:border-color .2s;
+}
+.astat:hover { border-color:var(--goldbdr2); border-left-color:var(--gold2); }
+.astat-n {
+  font-family:'Playfair Display',serif;
+  font-size:1.9rem; font-weight:700; color:var(--gold2); line-height:1;
+  display:block; margin-bottom:5px;
+}
+.astat-l { font-size:0.67rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--slate); }
+.cert-stack { display:flex; flex-direction:column; gap:11px; }
+.crt {
+  display:flex; align-items:center; gap:15px;
+  padding:15px 18px; border-radius:6px;
+  background:var(--dim); border:1px solid var(--bdr);
+  transition:border-color .25s, transform .25s;
+}
+.crt:hover { border-color:var(--goldbdr2); transform:translateX(5px); }
+.crt-ico {
+  width:36px; height:36px; flex-shrink:0; border-radius:5px;
+  background:var(--goldglow); border:1px solid var(--goldbdr);
+  display:flex; align-items:center; justify-content:center;
+}
+.crt-ico svg { width:15px; height:15px; stroke:var(--gold); stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.crt-name { font-size:0.83rem; font-weight:500; color:var(--cream); }
+.crt-sub  { font-size:0.7rem; color:var(--slate); margin-top:2px; }
+.pill {
+  margin-left:auto; flex-shrink:0; font-size:0.62rem; font-weight:600;
+  letter-spacing:0.08em; padding:3px 10px; border-radius:2px;
+}
+.pill-on  { background:var(--teal-soft); border:1px solid var(--teal-bdr); color:var(--teal); }
+.pill-wip { background:var(--goldglow); border:1px solid var(--goldbdr); color:var(--gold2); }
+
+/* ─── SKILLS ─── */
+.skill-row { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-bottom:18px; }
+.sk {
+  padding:28px 24px; border-radius:7px;
+  background:var(--dim); border:1px solid var(--bdr);
+  position:relative; overflow:hidden;
+  transition:border-color .25s,transform .25s;
+}
+.sk::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1.5px;
+  background:linear-gradient(90deg,var(--gold),rgba(191,155,90,0)); opacity:0;
+  transition:opacity .25s;
+}
+.sk:hover { border-color:var(--goldbdr); transform:translateY(-3px); }
+.sk:hover::before { opacity:1; }
+.sk-icon {
+  width:42px; height:42px; border-radius:7px; margin-bottom:18px;
+  background:var(--goldglow); border:1px solid var(--goldbdr);
+  display:flex; align-items:center; justify-content:center;
+}
+.sk-icon svg { width:18px; height:18px; stroke:var(--gold); stroke-width:1.7; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.sk-cat { font-size:0.65rem; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
+.tags { display:flex; flex-wrap:wrap; gap:7px; }
+.tg {
+  font-size:0.73rem; color:var(--slate2);
+  padding:5px 11px; border-radius:3px;
+  border:1px solid var(--bdr); background:rgba(255,255,255,0.03);
+  transition:color .15s,border-color .15s;
+}
+.tg:hover { color:var(--gold3); border-color:var(--goldbdr); }
+.tools-strip {
+  padding:20px 26px; border-radius:7px;
+  background:var(--dim); border:1px solid var(--bdr);
+  display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+}
+.t-lbl { font-size:0.63rem; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin-right:8px; flex-shrink:0; }
+.tool {
+  font-size:0.73rem; color:var(--slate2); padding:5px 14px;
+  border-radius:20px; border:1px solid var(--goldbdr);
+  background:var(--goldglow); transition:color .15s,background .15s;
+}
+.tool:hover { color:var(--gold3); background:rgba(191,155,90,0.2); }
+
+/* ─── EXPERIENCE ─── */
+.xp-wrap { padding-left:36px; position:relative; }
+.xp-wrap::before {
+  content:''; position:absolute; left:0; top:6px; bottom:0; width:1px;
+  background:linear-gradient(to bottom, var(--goldbdr2) 0%, transparent 100%);
+}
+.xp {
+  position:relative; margin-bottom:52px;
+  padding:28px 32px; border-radius:8px;
+  background:var(--dim); border:1px solid var(--bdr);
+  transition:border-color .25s;
+}
+.xp:hover { border-color:var(--goldbdr); }
+.xp::before {
+  content:''; position:absolute;
+  left:-40px; top:28px;
+  width:9px; height:9px; border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 0 3px var(--ink),0 0 0 5px rgba(191,155,90,0.28);
+}
+.xp-header { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:6px; }
+.xp-role { font-family:'Playfair Display',serif; font-size:1.18rem; font-weight:600; color:#fff; line-height:1.25; }
+.xp-period {
+  flex-shrink:0; font-size:0.63rem; font-weight:600; letter-spacing:0.09em;
+  padding:5px 13px; border-radius:2px;
+  background:var(--goldglow); border:1px solid var(--goldbdr); color:var(--gold2);
+  white-space:nowrap;
+}
+.xp-co { font-size:0.78rem; color:var(--slate); margin-bottom:18px; }
+.xp-co strong { color:var(--slate2); font-weight:500; }
+.xp-pts { list-style:none; display:flex; flex-direction:column; gap:9px; }
+.xp-pts li {
+  font-size:0.86rem; color:var(--slate2); padding-left:20px;
+  position:relative; line-height:1.78;
+}
+.xp-pts li::before {
+  content:''; position:absolute; left:0; top:10px;
+  width:6px; height:1px; background:var(--gold);
+}
+
+/* ─── PROJECTS ─── */
+.pj-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+.pj {
+  padding:36px 32px; border-radius:8px;
+  background:var(--dim); border:1px solid var(--bdr);
+  position:relative; overflow:hidden;
+  transition:border-color .25s,transform .25s;
+}
+.pj::after {
+  content:''; position:absolute; top:0; left:0; right:0; height:1.5px;
+  background:linear-gradient(90deg, rgba(56,178,160,0), var(--teal), rgba(56,178,160,0));
+  opacity:0; transition:opacity .25s;
+}
+.pj:hover { border-color:var(--teal-bdr); transform:translateY(-4px); }
+.pj:hover::after { opacity:1; }
+.pj-type {
+  font-size:0.62rem; font-weight:600; letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--teal); margin-bottom:12px;
+  display:flex; align-items:center; gap:8px;
+}
+.pj-type::before { content:''; width:16px; height:1px; background:var(--teal); }
+.pj-title { font-family:'Playfair Display',serif; font-size:1.18rem; font-weight:600; color:#fff; margin-bottom:8px; line-height:1.3; }
+.pj-org { font-size:0.73rem; color:var(--slate); margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid var(--bdr); }
+.pj-desc { font-size:0.84rem; color:var(--slate2); line-height:1.88; }
+.pj-link { display:inline-flex; align-items:center; gap:6px; margin-top:16px; font-size:0.72rem; font-weight:600; letter-spacing:0.08em; color:var(--teal); text-decoration:none; transition:color .2s; }
+.pj-link:hover { color:var(--gold2); }
+
+/* ─── PUBLICATIONS ─── */
+.pub-card {
+  padding:32px; border-radius:8px;
+  background:var(--dim); border:1px solid var(--bdr);
+  border-left:2px solid var(--teal);
+  transition:border-color .25s;
+}
+.pub-card:hover { border-color:var(--teal-bdr); border-left-color:var(--teal); }
+.pub-title { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:600; color:#fff; margin-bottom:8px; line-height:1.4; }
+.pub-journal { font-size:0.75rem; color:var(--teal); margin-bottom:14px; font-style:italic; }
+.pub-link { display:inline-flex; align-items:center; gap:6px; font-size:0.72rem; font-weight:600; letter-spacing:0.08em; color:var(--gold2); text-decoration:none; transition:color .2s; }
+.pub-link:hover { color:var(--gold3); }
+
+/* ─── EDUCATION ─── */
+.edu-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+.edu {
+  display:flex; gap:22px; align-items:flex-start;
+  padding:30px 28px; border-radius:8px;
+  background:var(--dim); border:1px solid var(--bdr);
+  transition:border-color .25s;
+}
+.edu:hover { border-color:var(--goldbdr); }
+.edu-icon {
+  width:50px; height:50px; flex-shrink:0; border-radius:7px;
+  background:var(--goldglow); border:1.5px solid var(--goldbdr);
+  display:flex; align-items:center; justify-content:center;
+}
+.edu-icon svg { width:20px; height:20px; stroke:var(--gold); stroke-width:1.6; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.edu-deg { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:600; color:#fff; margin-bottom:6px; line-height:1.3; }
+.edu-sch { font-size:0.78rem; color:var(--slate2); margin-bottom:6px; line-height:1.5; }
+.edu-yr  { font-size:0.68rem; font-weight:600; letter-spacing:0.1em; color:var(--gold); }
+.edu-gpa { font-size:0.68rem; color:var(--slate); margin-top:4px; }
+
+/* ─── CONTACT ─── */
+.ct-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+.ct-hl { font-family:'Playfair Display',serif; font-size:clamp(2rem,3vw,2.7rem); font-weight:700; color:#fff; line-height:1.2; margin-bottom:18px; }
+.ct-hl em { font-style:italic; font-weight:400; color:var(--gold2); }
+.ct-avail {
+  display:inline-flex; align-items:center; gap:9px;
+  padding:8px 18px; border-radius:20px; margin-bottom:22px;
+  background:rgba(74,222,128,0.07); border:1px solid rgba(74,222,128,0.2);
+  font-size:0.68rem; font-weight:600; letter-spacing:0.09em; color:#4ADE80;
+}
+.ct-sub { font-size:0.88rem; color:var(--slate2); line-height:1.95; margin-bottom:32px; max-width:400px; }
+.ct-links { display:flex; flex-direction:column; gap:11px; }
+.ct-row {
+  display:flex; align-items:center; gap:16px;
+  padding:16px 20px; border-radius:6px;
+  background:var(--dim); border:1px solid var(--bdr);
+  text-decoration:none; transition:border-color .2s,transform .2s;
+}
+.ct-row:hover { border-color:var(--goldbdr2); transform:translateX(5px); }
+.ct-ico {
+  width:38px; height:38px; flex-shrink:0; border-radius:4px;
+  background:var(--goldglow); border:1px solid var(--goldbdr);
+  display:flex; align-items:center; justify-content:center;
+}
+.ct-ico svg { width:15px; height:15px; stroke:var(--gold); stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.ct-lbl { font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--slate); display:block; margin-bottom:2px; }
+.ct-val { font-size:0.84rem; font-weight:500; color:var(--cream); }
+
+/* ─── FOOTER ─── */
+footer {
+  position:relative; z-index:1;
+  background:var(--ink2); border-top:1px solid var(--bdr);
+  padding:26px 7%;
+  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+}
+.ft-l { font-family:'Playfair Display',serif; font-size:1rem; color:var(--gold); }
+.ft-c { font-size:0.7rem; color:var(--slate); }
+.ft-r { display:flex; gap:22px; }
+.ft-r a { font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--slate); text-decoration:none; transition:color .2s; }
+.ft-r a:hover { color:var(--gold2); }
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:1100px){
+  .hero-wrap { grid-template-columns:1fr; gap:60px; }
+  .portrait-col { order:-1; }
+  .portrait-stage { width:240px; }
+  .pframe { width:240px; height:285px; }
+  .about-grid,.ct-grid { grid-template-columns:1fr; gap:48px; }
+  .skill-row { grid-template-columns:1fr 1fr; }
+}
+@media(max-width:768px){
+  nav ul { display:none; }
+  .skill-row,.pj-grid,.edu-grid { grid-template-columns:1fr; }
+  .hero-kpis { flex-direction:column; }
+  .kpi { border-right:none; border-bottom:1px solid var(--bdr); }
+  .kpi:last-child { border-bottom:none; }
+  .sec { padding:72px 5%; }
+  .xp-wrap { padding-left:20px; }
+  .xp { padding:22px 18px; }
+  .about-nums { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="n-logo" href="#home">
+    <div class="n-seal">AM</div>
+    <div class="n-text">
+      <div class="n-name">Avoy Mohajan</div>
+      <div class="n-sub">Site Reliability Engineer</div>
+    </div>
+  </a>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact" class="n-hire">Hire Me</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="hero-wrap">
+
+    <!-- LEFT -->
+    <div>
+      <div class="hero-tag"><span class="hero-tag-line"></span>Site Reliability Engineer · Kolkata, WB</div>
+      <h1 class="hero-h1">Avoy<br><span>Mohajan</span></h1>
+      <div class="hero-divider"></div>
+      <p class="hero-tagline">Linux Infrastructure &nbsp;·&nbsp; Cloud &amp; Automation &nbsp;·&nbsp; SRE</p>
+      <p class="hero-desc">Site Reliability and Infrastructure Engineer with hands-on experience supporting highly available Linux-based production environments across 24/7 SLA-driven operations. Published researcher in blockchain-based security frameworks, with an MS in Computer Science from Oklahoma State University.</p>
+      <div class="hero-kpis">
+        <div class="kpi"><span class="kpi-val">99.9%</span><span class="kpi-lbl">Uptime Maintained</span></div>
+        <div class="kpi"><span class="kpi-val">400+</span><span class="kpi-lbl">Apps Supported</span></div>
+        <div class="kpi"><span class="kpi-val">35–40%</span><span class="kpi-lbl">Manual Effort Cut</span></div>
+        <div class="kpi"><span class="kpi-val">65K+</span><span class="kpi-lbl">Vulns Remediated</span></div>
+      </div>
+      <div class="hero-btns">
+        <a href="#contact" class="btn-a">Get In Touch &rarr;</a>
+        <a href="#experience" class="btn-b">View Experience</a>
+      </div>
+    </div>
+
+    <!-- RIGHT: PORTRAIT -->
+    <div class="portrait-col">
+      <div class="portrait-stage">
+        <div class="pframe">
+          <img src="profile.jpg" alt="Avoy Mohajan"
+            onerror="this.style.display='none'; document.querySelector('.pframe-init').style.display='flex';">
+          <div class="pframe-init" style="display:none;">AM</div>
+          <div class="pframe-overlay"></div>
+        </div>
+        <div class="corner c-tl"></div>
+        <div class="corner c-tr"></div>
+        <div class="corner c-bl"></div>
+        <div class="corner c-br"></div>
+        <div class="avail-chip">
+          <div class="avail-dot"></div>
+          <span class="avail-txt">Open to Opportunities</span>
+        </div>
+      </div>
+      <div class="badge-row">
+        <span class="pbadge">MS Computer Science</span>
+        <span class="pbadge">AWS Cloud</span>
+        <span class="pbadge">OSU '25</span>
+        <span class="pbadge">Published Researcher</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- ABOUT -->
+<section class="sec" id="about">
+  <div class="sec-max">
+    <div class="overline">Background</div>
+    <h2 class="sec-title">About <em>Me</em></h2>
+    <div class="about-grid">
+      <div>
+        <div class="about-body">
+          <p>MS Computer Science graduate from Oklahoma State University with deep expertise in Linux system administration, cloud infrastructure operations on AWS, automation, monitoring, and incident response — sustaining 99.9%+ service availability in mission-critical environments.</p>
+          <p>My career spans enterprise production support at Tata Consultancy Services (serving global clients including TD Bank and Los Angeles Times), graduate research in blockchain-based security frameworks, and hands-on SRE work at IpserLabs. I specialize in translating operational complexity into reliable, automated, and observable infrastructure.</p>
+          <p>I believe the best SREs are equal parts engineer, problem solver, and communicator. Whether remediating 65,000+ vulnerabilities across enterprise Linux platforms or publishing peer-reviewed research on zero-trust distributed systems, I bring disciplined rigor and cross-functional fluency to every challenge.</p>
+        </div>
+        <div class="about-nums">
+          <div class="astat"><span class="astat-n">99.9%+</span><span class="astat-l">Service Availability</span></div>
+          <div class="astat"><span class="astat-n">65K+</span><span class="astat-l">Vulnerabilities Mitigated</span></div>
+          <div class="astat"><span class="astat-n">400+</span><span class="astat-l">VMs Migrated to Azure</span></div>
+          <div class="astat"><span class="astat-n">~30%</span><span class="astat-l">MTTD Reduction</span></div>
+        </div>
+      </div>
+      <div class="cert-stack">
+        <div class="crt">
+          <div class="crt-ico"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <div><div class="crt-name">AWS Academy Cloud Foundations</div><div class="crt-sub">AWS Academy Graduate · Apr 2025</div></div>
+          <span class="pill pill-on">Active</span>
+        </div>
+        <div class="crt">
+          <div class="crt-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h8M12 8v8"/></svg></div>
+          <div><div class="crt-name">Database Management System</div><div class="crt-sub">NPTEL ELITE Rank · Apr 2019</div></div>
+          <span class="pill pill-on">Active</span>
+        </div>
+        <div class="crt">
+          <div class="crt-ico"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+          <div><div class="crt-name">Programming in C</div><div class="crt-sub">NPTEL · Oct 2018</div></div>
+          <span class="pill pill-on">Active</span>
+        </div>
+        <div class="crt">
+          <div class="crt-ico"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div><div class="crt-name">Peer-Reviewed Publication</div><div class="crt-sub">Electronics, MDPI · 2025</div></div>
+          <span class="pill pill-on">Published</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- SKILLS -->
+<section class="sec alt" id="skills">
+  <div class="sec-max">
+    <div class="overline">Capabilities</div>
+    <h2 class="sec-title">Core <em>Competencies</em></h2>
+    <div class="skill-row">
+      <div class="sk">
+        <div class="sk-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div class="sk-cat">Operating Systems &amp; Cloud</div>
+        <div class="tags">
+          <span class="tg">Linux (RHEL, Ubuntu, CentOS)</span><span class="tg">UNIX</span><span class="tg">Windows Server</span><span class="tg">AWS EC2 / S3 / IAM</span><span class="tg">VPC &amp; Load Balancers</span><span class="tg">VMware ESXi</span>
+        </div>
+      </div>
+      <div class="sk">
+        <div class="sk-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="sk-cat">Monitoring &amp; Observability</div>
+        <div class="tags">
+          <span class="tg">Splunk</span><span class="tg">Dynatrace</span><span class="tg">Grafana</span><span class="tg">Zabbix</span><span class="tg">Log Analysis</span><span class="tg">Alerting</span><span class="tg">MTTD/MTTR</span>
+        </div>
+      </div>
+      <div class="sk">
+        <div class="sk-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="sk-cat">Security &amp; Compliance</div>
+        <div class="tags">
+          <span class="tg">IAM &amp; Access Control</span><span class="tg">OS Hardening</span><span class="tg">Vulnerability Remediation</span><span class="tg">Patch Management</span><span class="tg">Zero Trust</span><span class="tg">Blockchain Security</span>
+        </div>
+      </div>
+    </div>
+    <div class="skill-row">
+      <div class="sk">
+        <div class="sk-icon"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <div class="sk-cat">Automation &amp; Scripting</div>
+        <div class="tags">
+          <span class="tg">Python</span><span class="tg">Bash / Shell</span><span class="tg">PowerShell</span><span class="tg">Terraform (IaC)</span><span class="tg">C / C++</span><span class="tg">Core Java</span>
+        </div>
+      </div>
+      <div class="sk">
+        <div class="sk-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+        <div class="sk-cat">Containers &amp; DevOps</div>
+        <div class="tags">
+          <span class="tg">Docker</span><span class="tg">Kubernetes</span><span class="tg">Containerized Apps</span><span class="tg">Server Provisioning</span><span class="tg">Performance Tuning</span>
+        </div>
+      </div>
+      <div class="sk">
+        <div class="sk-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div class="sk-cat">IT Operations &amp; Service Mgmt</div>
+        <div class="tags">
+          <span class="tg">ServiceNow</span><span class="tg">Incident Response</span><span class="tg">Root Cause Analysis</span><span class="tg">Change Management</span><span class="tg">Runbooks</span><span class="tg">SLA Operations</span>
+        </div>
+      </div>
+    </div>
+    <div class="tools-strip">
+      <span class="t-lbl">Networking</span>
+      <span class="tool">TCP/IP</span><span class="tool">DNS</span><span class="tool">SSH</span><span class="tool">DHCP</span><span class="tool">FTP</span><span class="tool">SMTP</span><span class="tool">Network Troubleshooting</span>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- EXPERIENCE -->
+<section class="sec" id="experience">
+  <div class="sec-max">
+    <div class="overline">Career History</div>
+    <h2 class="sec-title">Professional <em>Experience</em></h2>
+    <div class="xp-wrap">
+
+      <div class="xp">
+        <div class="xp-header">
+          <div class="xp-role">Site Reliability Engineer Intern</div>
+          <span class="xp-period">Oct 2025 – Present</span>
+        </div>
+        <div class="xp-co"><strong>IpserLabs LLC</strong> &nbsp;·&nbsp; Fort Worth, TX</div>
+        <ul class="xp-pts">
+          <li>Managed Linux-based infrastructure supporting production applications and engineering platforms, reducing unplanned downtime by approximately 25%.</li>
+          <li>Automated infrastructure operations using Python and Bash scripting, reducing manual administrative effort by 35–40% while improving operational consistency across environments.</li>
+          <li>Enhanced system observability by improving monitoring and alerting configurations, reducing Mean Time to Detect (MTTD) incidents by ~30%.</li>
+          <li>Participated in on-call rotations and incident response, performing root cause analysis and troubleshooting infrastructure issues, contributing to 35% faster incident resolution (MTTR).</li>
+          <li>Supported containerized environments using Docker and Kubernetes, assisting with deployment operations, configuration management, and troubleshooting service disruptions.</li>
+          <li>Implemented infrastructure security best practices including access control management, OS hardening, and secure configuration policies to strengthen system security posture.</li>
+          <li>Developed and maintained operational documentation, troubleshooting guides, and engineering runbooks, improving knowledge sharing and onboarding efficiency.</li>
+        </ul>
+      </div>
+
+      <div class="xp">
+        <div class="xp-header">
+          <div class="xp-role">Graduate Research Assistant</div>
+          <span class="xp-period">Jan 2024 – May 2025</span>
+        </div>
+        <div class="xp-co"><strong>Oklahoma State University</strong> &nbsp;·&nbsp; Stillwater, OK</div>
+        <ul class="xp-pts">
+          <li>Designed and implemented a blockchain-based dynamic access control framework integrating security awareness into distributed computing environments.</li>
+          <li>Developed simulation environments to evaluate access control policies, trust metrics, and decentralized security models within distributed network architectures.</li>
+          <li>Conducted research on distributed systems security, blockchain frameworks, and infrastructure reliability, contributing to improved security validation methodologies.</li>
+          <li>Authored and published a peer-reviewed research paper in Electronics (MDPI, 2025) on blockchain-based access control frameworks for zero-trust distributed systems.</li>
+          <li>Built and tested system prototypes to analyze security, scalability, and performance trade-offs in decentralized computing environments.</li>
+        </ul>
+      </div>
+
+      <div class="xp">
+        <div class="xp-header">
+          <div class="xp-role">System Engineer</div>
+          <span class="xp-period">Nov 2020 – Aug 2023</span>
+        </div>
+        <div class="xp-co"><strong>Tata Consultancy Services</strong> &nbsp;·&nbsp; Kolkata, India &nbsp;·&nbsp; Clients: TD Bank, Los Angeles Times</div>
+        <ul class="xp-pts">
+          <li>Maintained enterprise production platforms supporting 400+ applications, ensuring 99.9%+ system availability within SLA-driven 24/7 operational environments for global clients.</li>
+          <li>Led enterprise vulnerability remediation initiatives mitigating 65,000+ security vulnerabilities across Linux and Windows infrastructure through patch management and system hardening programs.</li>
+          <li>Supported migration of 400+ virtual machines from VMware infrastructure to Microsoft Azure, improving infrastructure scalability and enabling cloud platform adoption.</li>
+          <li>Developed automation scripts using Python, Bash, and PowerShell to streamline patching, system provisioning, and monitoring processes, reducing manual operational workload by 35–40%.</li>
+          <li>Implemented enterprise monitoring and observability platforms including Splunk, Dynatrace, and Zabbix, improving operational visibility and enabling proactive incident detection.</li>
+          <li>Resolved complex Level-2 and Level-3 production incidents through log analysis, system diagnostics, and cross-team troubleshooting across application, infrastructure, and network layers.</li>
+          <li>Collaborated with cross-functional teams including application developers, database administrators, and network engineers to support deployments and strengthen overall platform reliability.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- PROJECTS -->
+<section class="sec alt" id="projects">
+  <div class="sec-max">
+    <div class="overline">Selected Work</div>
+    <h2 class="sec-title">Key <em>Projects</em></h2>
+    <div class="pj-grid">
+      <div class="pj">
+        <div class="pj-type">Security Research · 2025</div>
+        <h3 class="pj-title">Blockchain-Based Access Control Framework</h3>
+        <div class="pj-org">Oklahoma State University</div>
+        <p class="pj-desc">Designed a blockchain-based framework embedding security awareness into dynamic access control for distributed systems. Integrated zero-trust principles with decentralized policy enforcement, contributing to improved security validation methodologies for enterprise and cloud environments.</p>
+        <a href="https://www.mdpi.com/2079-9292/14/6/1095" target="_blank" class="pj-link">View Published Paper &rarr;</a>
+      </div>
+      <div class="pj">
+        <div class="pj-type">Enterprise Migration · 2022</div>
+        <h3 class="pj-title">VMware to Azure: 400+ VM Cloud Migration</h3>
+        <div class="pj-org">Tata Consultancy Services</div>
+        <p class="pj-desc">Supported the end-to-end migration of 400+ virtual machines from VMware ESXi infrastructure to Microsoft Azure, improving scalability and enabling full cloud platform adoption for global enterprise clients including TD Bank and Los Angeles Times.</p>
+      </div>
+      <div class="pj">
+        <div class="pj-type">Systems Development · 2020</div>
+        <h3 class="pj-title">Insurance Management System</h3>
+        <div class="pj-org">Future Institute of Engineering and Management</div>
+        <p class="pj-desc">Developed an ASP.NET and Oracle-based system to streamline policy, claims, and customer data management, enabling end-to-end digital workflows for insurance operations.</p>
+      </div>
+      <div class="pj">
+        <div class="pj-type">Software Development · 2019</div>
+        <h3 class="pj-title">Library Management System</h3>
+        <div class="pj-org">Future Institute of Engineering and Management</div>
+        <p class="pj-desc">Built a Core Java and SQLite application to automate cataloging, issuing, and record maintenance for libraries, replacing manual workflows with a robust and scalable digital system.</p>
+      </div>
+    </div>
+
+    <!-- Publication Card -->
+    <div style="margin-top:22px;">
+      <div class="overline" style="margin-top:48px; margin-bottom:20px;">Publication</div>
+      <div class="pub-card">
+        <div class="pub-title">Embedding Security Awareness into a Blockchain-Based Dynamic Access Control Framework for the Zero Trust Model in Distributed Systems</div>
+        <div class="pub-journal">Mohajan, A., &amp; Jahan, S. (2025). Electronics, 14(6), 1095. MDPI.</div>
+        <a href="https://www.mdpi.com/2079-9292/14/6/1095" target="_blank" class="pub-link">View Paper &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- EDUCATION -->
+<section class="sec" id="education">
+  <div class="sec-max">
+    <div class="overline">Academic Background</div>
+    <h2 class="sec-title">Education &amp; <em>Credentials</em></h2>
+    <div class="edu-grid">
+      <div class="edu">
+        <div class="edu-icon"><svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+        <div>
+          <div class="edu-deg">Master of Science — Computer Science</div>
+          <div class="edu-sch">Oklahoma State University · Stillwater, OK</div>
+          <div class="edu-yr">May 2025</div>
+          <div class="edu-gpa">GPA: 3.2 / 4.0</div>
+        </div>
+      </div>
+      <div class="edu">
+        <div class="edu-icon"><svg viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></div>
+        <div>
+          <div class="edu-deg">Bachelor of Technology — Information Technology</div>
+          <div class="edu-sch">Future Institute of Engineering and Management · Kolkata, India</div>
+          <div class="edu-yr">Jul 2020</div>
+          <div class="edu-gpa">CGPA: 8.22 / 10.0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- CONTACT -->
+<section class="sec alt" id="contact">
+  <div class="sec-max">
+    <div class="ct-grid">
+      <div>
+        <div class="overline">Let's Connect</div>
+        <h2 class="ct-hl">Open to new<br><em>opportunities</em></h2>
+        <div class="ct-avail"><div class="avail-dot"></div>Available · Kolkata, WB · Open to Relocation</div>
+        <p class="ct-sub">Whether you need a skilled SRE to strengthen your production infrastructure, lead cloud migration initiatives, or bring reliability engineering expertise to your team — let's start a conversation.</p>
+        <a href="mailto:avoymohajan@icloud.com" class="btn-a">Send a Message &rarr;</a>
+      </div>
+      <div class="ct-links">
+        <a class="ct-row" href="tel:+18334822387">
+          <div class="ct-ico"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.58 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.73a16 16 0 0 0 6.29 6.29l1.8-1.8a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <div><span class="ct-lbl">Phone</span><span class="ct-val">+1 (833) 482-2387</span></div>
+        </a>
+        <a class="ct-row" href="mailto:avoymohajan@icloud.com">
+          <div class="ct-ico"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><span class="ct-lbl">Email</span><span class="ct-val">avoymohajan@icloud.com</span></div>
+        </a>
+        <a class="ct-row" href="https://linkedin.com/in/avoymohajan" target="_blank">
+          <div class="ct-ico"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div>
+          <div><span class="ct-lbl">LinkedIn</span><span class="ct-val">linkedin.com/in/avoymohajan</span></div>
+        </a>
+        <a class="ct-row" href="https://www.mdpi.com/2079-9292/14/6/1095" target="_blank">
+          <div class="ct-ico"><svg viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></div>
+          <div><span class="ct-lbl">Publication</span><span class="ct-val">Electronics, MDPI (2025)</span></div>
+        </a>
+        <a class="ct-row" href="#">
+          <div class="ct-ico"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><span class="ct-lbl">Location</span><span class="ct-val">Kolkata, WB — Open to Relocation</span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-l">Avoy Mohajan</div>
+  <div class="ft-c">&copy; 2026 Avoy Mohajan &nbsp;·&nbsp; All Rights Reserved</div>
+  <div class="ft-r">
+    <a href="#home">Top</a>
+    <a href="#experience">Experience</a>
+    <a href="#contact">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
